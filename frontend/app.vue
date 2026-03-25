@@ -1,39 +1,65 @@
-<!-- Punt d'entrada principal de l'aplicació Nuxt 3. -->
-<!-- Proporciona una estructura bàsica i navegació inicial per al sistema de reserves. -->
+<!-- Punt d'entrada refactoritzat per utilitzar components i composables. -->
 <template>
-  <div class="min-h-screen bg-gray-100 flex items-center justify-center">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-      <h1 class="text-2xl font-bold mb-4 text-center">Sistema de Venda d'Entrades</h1>
-      <p class="text-gray-600 text-center mb-6">Benvingut a la plataforma de vendes d'alta concurrència.</p>
-      <div class="space-y-4">
-        <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
-          Iniciar Sessió
-        </button>
-        <button class="w-full border border-blue-600 text-blue-600 py-2 rounded hover:bg-blue-50 transition">
-          Registrar-se
-        </button>
+  <div class="min-h-screen bg-gray-50 flex flex-col font-sans">
+    
+    <!-- HEADER: Totosala -->
+    <header class="bg-white border-b p-4 shadow-sm sticky top-0 z-10">
+      <h1 class="text-2xl font-black text-blue-900 text-center tracking-tight">
+        TOTOSALA
+      </h1>
+    </header>
+
+    <!-- CONTINGUT PRINCIPAL -->
+    <main class="flex-1 overflow-y-auto p-4 pb-24">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-xl font-bold mb-6 text-gray-800 border-l-4 border-blue-600 pl-3 capitalize">
+          {{ categoriaActual }}
+        </h2>
+
+        <!-- Component de llista refactoritzat -->
+        <LlistaCatalogo :llista="llistaActual" />
       </div>
-    </div>
+    </main>
+
+    <!-- FOOTER: Navegació -->
+    <footer class="bg-white border-t p-3 fixed bottom-0 w-full flex justify-around items-center shadow-lg">
+      <button @click="canviarCategoria('pel·lícules')"
+              :class="['flex-1 py-3 px-2 rounded-xl text-sm font-bold transition-all', 
+                       categoriaActual === 'pel·lícules' ? 'bg-blue-100 text-blue-800 scale-105' : 'text-gray-500']">
+        Pel·lícules
+      </button>
+      <div class="w-px h-6 bg-gray-200 mx-2"></div>
+      <button @click="canviarCategoria('concerts')"
+              :class="['flex-1 py-3 px-2 rounded-xl text-sm font-bold transition-all', 
+                       categoriaActual === 'concerts' ? 'bg-blue-100 text-blue-800 scale-105' : 'text-gray-500']">
+        Concerts
+      </button>
+    </footer>
+
   </div>
 </template>
 
 <script>
-// Ús de l'estat global amb Pinia
-import { useAuthStore } from './store/auth';
+import { useEntrades } from './composables/useEntrades';
 
 export default {
   setup: function() {
-    var magatzemAutenticacio = useAuthStore();
+    // A. Ús del composable modular
+    var entrades = useEntrades();
     
-    // Aquí es podrien definir les funcions de la pàgina seguint l'estil ES5.
-    
+    // B. Retorn de variables i funcions a la plantilla
     return {
-      magatzem: magatzemAutenticacio
+      categoriaActual: entrades.categoriaActual,
+      llistaActual: entrades.llistaActual,
+      canviarCategoria: entrades.canviarCategoria
     };
   }
 }
 </script>
 
 <style>
-/* Estils bàsics per a l'aplicació */
+body {
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+}
 </style>

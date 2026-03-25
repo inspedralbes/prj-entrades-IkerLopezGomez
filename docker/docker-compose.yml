@@ -1,6 +1,4 @@
-# Configuració de Docker Compose per al sistema de venda d'entrades d'alta concurrència.
-# Defineix el servei MySQL 8.0 amb volums de dades persistents.
-version: '3.8'
+# Configuració de Docker Compose per a tot el projecte
 
 services:
   db:
@@ -17,6 +15,46 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ../database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: ticketing_backend_container
+    restart: always
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_USER: user
+      DB_PASSWORD: pass
+      DB_NAME: ticketing_db
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "const http = require('http'); const req = http.get('http://localhost:3000/api/estat', (res) => { if (res.statusCode === 200) { process.exit(0); } else { process.exit(1); } }); req.on('error', (err) => { process.exit(1); });"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: ticketing_frontend_container
+    restart: always
+    ports:
+      - "3001:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
 
 volumes:
   db_data:
