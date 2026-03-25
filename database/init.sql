@@ -15,40 +15,52 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Taula d'esdeveniments
-CREATE TABLE IF NOT EXISTS events (
+-- Taula de pel·lícules
+CREATE TABLE IF NOT EXISTS movies (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
-    type ENUM('movie', 'concert') NOT NULL,
     description TEXT,
-    date DATETIME NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    image_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Taula de seients
-CREATE TABLE IF NOT EXISTS seats (
+-- Taula de concerts
+CREATE TABLE IF NOT EXISTS concerts (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    event_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    artist VARCHAR(255) NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    image_url VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Taula de seients per a pel·lícules
+CREATE TABLE IF NOT EXISTS movie_seats (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    movie_id INT NOT NULL,
     status ENUM('available', 'reserved', 'sold') DEFAULT 'available',
     `row` VARCHAR(10) NOT NULL,
     `number` INT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+    FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE
 );
 
--- Taula de reserves
-CREATE TABLE IF NOT EXISTS reservations (
+-- Taula de seients per a concerts
+CREATE TABLE IF NOT EXISTS concert_seats (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    seat_id INT UNIQUE NOT NULL,
-    expires_at TIMESTAMP NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (seat_id) REFERENCES seats(id) ON DELETE CASCADE,
-    INDEX idx_expires_at (expires_at)
+    concert_id INT NOT NULL,
+    status ENUM('available', 'reserved', 'sold') DEFAULT 'available',
+    `row` VARCHAR(10) NOT NULL,
+    `number` INT NOT NULL,
+    FOREIGN KEY (concert_id) REFERENCES concerts(id) ON DELETE CASCADE
 );
 
--- Taula de comandes
+-- Taula de comandes (generic)
 CREATE TABLE IF NOT EXISTS orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,

@@ -13,5 +13,18 @@ export default defineNuxtConfig({
         // exposeConfig: false,
         // config: {},
         // viewer: true,
+    },
+    vite: {
+        server: {
+            hmr: {
+                protocol: 'ws',
+                host: 'localhost',
+                port: 3001 // El port extern de Docker
+            },
+            watch: {
+                usePolling: true, // Necessari sovint en Docker
+                interval: 1000
+            }
+        }
     }
 })

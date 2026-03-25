@@ -3,16 +3,39 @@
 <template>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div v-for="element in llista" :key="element.id" 
-         class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm hover:border-blue-300 transition-colors">
-      <div class="h-32 bg-gray-100 rounded-lg mb-3 flex items-center justify-center text-gray-400">
-        Imatge no disponible
+         class="bg-white p-0 rounded-2xl border border-gray-200 shadow-sm hover:border-blue-300 transition-all hover:shadow-md overflow-hidden flex flex-col">
+      
+      <!-- Imatge amb fallback -->
+      <div class="h-48 bg-gray-100 flex items-center justify-center relative overflow-hidden">
+        <img v-if="element.image_url" 
+             :src="element.image_url" 
+             :alt="element.title"
+             class="w-full h-full object-cover">
+        <div v-else class="text-gray-400 text-xs font-bold uppercase tracking-widest">
+          Imatge no disponible
+        </div>
+        <!-- Badge de preu -->
+        <div class="absolute top-3 right-3 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-black shadow-lg">
+          {{ element.price }}€
+        </div>
       </div>
-      <h3 class="font-bold text-lg text-gray-900">{{ element.titol }}</h3>
-      <p class="text-sm text-gray-500 mt-1">{{ element.descripcio }}</p>
-      <div class="mt-4 flex justify-between items-center">
-        <span class="text-blue-700 font-bold">{{ element.preu }}€</span>
-        <button class="bg-blue-600 text-white px-4 py-1.5 rounded-lg text-sm font-semibold hover:bg-blue-700 active:scale-95 transition">
-          Reservar
+
+      <div class="p-5 flex-1 flex flex-col">
+        <h3 class="font-black text-xl text-gray-900 leading-tight mb-2">{{ element.title }}</h3>
+        <p class="text-sm text-gray-500 line-clamp-2 mb-4 flex-1">{{ element.description }}</p>
+        
+        <!-- Detalls de data i hora -->
+        <div class="bg-gray-50 rounded-xl p-3 mb-4 flex gap-4 text-xs font-bold text-gray-600">
+          <div class="flex items-center gap-1">
+            <span class="text-blue-500">📅</span> {{ formatarData(element.date) }}
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="text-blue-500">🕒</span> {{ element.time.substring(0, 5) }}
+          </div>
+        </div>
+
+        <button class="w-full bg-blue-600 text-white py-3 rounded-xl text-sm font-black hover:bg-blue-700 active:scale-95 transition-all shadow-md shadow-blue-100 uppercase tracking-widest">
+          Reservar Entrades
         </button>
       </div>
     </div>
@@ -25,6 +48,14 @@ export default {
     llista: {
       type: Array,
       required: true
+    }
+  },
+  methods: {
+    formatarData: function(dataStr) {
+      if (!dataStr) return '';
+      // Retorna data en format DD/MM/YYYY
+      var d = new Date(dataStr);
+      return d.toLocaleDateString('ca-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
     }
   }
 }

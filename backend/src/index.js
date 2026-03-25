@@ -26,6 +26,28 @@ app.get('/api/estat', function (req, res) {
     res.json({ estat: 'en funcionament', projecte: 'Totosala' });
 });
 
+// Ruta per obtenir totes les pel·lícules
+app.get('/api/movies', function (req, res) {
+    pool.query('SELECT * FROM movies')
+        .then(function (resultat) {
+            res.json(resultat[0]);
+        })
+        .catch(function (error) {
+            res.status(500).json({ error: error.message });
+        });
+});
+
+// Ruta per obtenir tots els concerts
+app.get('/api/concerts', function (req, res) {
+    pool.query('SELECT * FROM concerts')
+        .then(function (resultat) {
+            res.json(resultat[0]);
+        })
+        .catch(function (error) {
+            res.status(500).json({ error: error.message });
+        });
+});
+
 //==============================================================================
 //================================ INICIS ======================================
 //==============================================================================
