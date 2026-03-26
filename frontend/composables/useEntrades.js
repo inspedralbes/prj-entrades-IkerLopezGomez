@@ -1,5 +1,5 @@
 // Composable per a la gestió de les entrades (Pel·lícules i Concerts) des de la BD.
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 
 export var useEntrades = function () {
     // A. Definició de l'estat reactiu
@@ -8,18 +8,18 @@ export var useEntrades = function () {
     var dadesConcerts = ref([]);
     var carregant = ref(true);
 
-    // B. Funció per carregar dades des de l'API
+    // B. Funció per carregar dades des de l'API (Laravel a port 8000)
     var carregarDades = function () {
         carregant.value = true;
 
-        // Carreguem pel·lícules
-        fetch('http://localhost:3000/api/movies')
+        // Carreguem pel·lícules des de Laravel
+        fetch('http://localhost:8000/api/movies')
             .then(function (res) { return res.json(); })
             .then(function (data) { dadesPelicules.value = data; })
             .catch(function (err) { console.error('Error carregant pel·lícules:', err); });
 
-        // Carreguem concerts
-        fetch('http://localhost:3000/api/concerts')
+        // Carreguem concerts des de Laravel
+        fetch('http://localhost:8000/api/concerts')
             .then(function (res) { return res.json(); })
             .then(function (data) { dadesConcerts.value = data; })
             .catch(function (err) { console.error('Error carregant concerts:', err); })

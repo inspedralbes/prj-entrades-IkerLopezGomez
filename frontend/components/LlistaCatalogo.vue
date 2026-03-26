@@ -7,35 +7,35 @@
       
       <!-- Imatge amb fallback -->
       <div class="h-48 bg-gray-100 flex items-center justify-center relative overflow-hidden">
-        <img v-if="element.image_url" 
-             :src="element.image_url" 
-             :alt="element.title"
+        <img v-if="element.imatge_url" 
+             :src="element.imatge_url" 
+             :alt="element.titol"
              class="w-full h-full object-cover">
         <div v-else class="text-gray-400 text-xs font-bold uppercase tracking-widest">
           Imatge no disponible
         </div>
         <!-- Badge de preu -->
         <div class="absolute top-3 right-3 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-black shadow-lg">
-          {{ element.price }}€
+          {{ element.preu }}€
         </div>
       </div>
 
       <div class="p-5 flex-1 flex flex-col">
-        <h3 class="font-black text-xl text-gray-900 leading-tight mb-2">{{ element.title }}</h3>
-        <p class="text-sm text-gray-500 line-clamp-2 mb-4 flex-1">{{ element.description }}</p>
+        <h3 class="font-black text-xl text-gray-900 leading-tight mb-2">{{ element.titol }}</h3>
+        <p class="text-sm text-gray-500 line-clamp-2 mb-4 flex-1">{{ element.descripcio }}</p>
         
         <!-- Detalls de data i hora -->
         <div class="bg-gray-50 rounded-xl p-3 mb-4 flex gap-4 text-xs font-bold text-gray-600">
           <div class="flex items-center gap-1">
-            <span class="text-blue-500">📅</span> {{ formatarData(element.date) }}
+            <span class="text-blue-500">📅</span> {{ formatarData(element.data) }}
           </div>
           <div class="flex items-center gap-1">
-            <span class="text-blue-500">🕒</span> {{ element.time.substring(0, 5) }}
+            <span class="text-blue-500">🕒</span> {{ element.hora.substring(0, 5) }}
           </div>
         </div>
 
         <button class="w-full bg-blue-600 text-white py-3 rounded-xl text-sm font-black hover:bg-blue-700 active:scale-95 transition-all shadow-md shadow-blue-100 uppercase tracking-widest">
-          Reservar Entrades
+          Comprar Entrades
         </button>
       </div>
     </div>

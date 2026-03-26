@@ -18,25 +18,25 @@ CREATE TABLE IF NOT EXISTS users (
 -- Taula de pel·lícules
 CREATE TABLE IF NOT EXISTS movies (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    date DATE NOT NULL,
-    time TIME NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    image_url VARCHAR(255),
+    titol VARCHAR(255) NOT NULL,
+    descripcio TEXT,
+    data DATE NOT NULL,
+    hora TIME NOT NULL,
+    preu DECIMAL(10, 2) NOT NULL,
+    imatge_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Taula de concerts
 CREATE TABLE IF NOT EXISTS concerts (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    artist VARCHAR(255) NOT NULL,
-    date DATE NOT NULL,
-    time TIME NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    image_url VARCHAR(255),
+    titol VARCHAR(255) NOT NULL,
+    descripcio TEXT,
+    artista VARCHAR(255) NOT NULL,
+    data DATE NOT NULL,
+    hora TIME NOT NULL,
+    preu DECIMAL(10, 2) NOT NULL,
+    imatge_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

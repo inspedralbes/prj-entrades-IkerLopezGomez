@@ -2,14 +2,23 @@
 //================================ IMPORTS =====================================
 //==============================================================================
 var express = require('express');
-console.log('Iniciant el backend...');
+var http = require('http');
+var socketIo = require('socket.io');
 var cors = require('cors');
-var pool = require('./config/db');
+
+console.log('Iniciant el backend de temps real (Node.js)...');
 
 //==============================================================================
 //================================ VARIABLES ===================================
 //==============================================================================
 var app = express();
+var server = http.createServer(app);
+var io = socketIo(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
 var port = process.env.PORT || 3000;
 
 //==============================================================================
@@ -19,49 +28,41 @@ app.use(cors());
 app.use(express.json());
 
 //==============================================================================
-//================================ RUTES =======================================
+//================================ RUTES = [SOLS ESTAT] ========================
 //==============================================================================
-// Ruta de prova per verificar que el backend funciona.
 app.get('/api/estat', function (req, res) {
-    res.json({ estat: 'en funcionament', projecte: 'Totosala' });
+    res.json({ estat: 'en funcionament', servei: 'Temps Real (Socket.io)' });
 });
 
-// Ruta per obtenir totes les pel·lícules
-app.get('/api/movies', function (req, res) {
-    pool.query('SELECT * FROM movies')
-        .then(function (resultat) {
-            res.json(resultat[0]);
-        })
-        .catch(function (error) {
-            res.status(500).json({ error: error.message });
-        });
-});
+//==============================================================================
+//================================ SOCKET.IO ===================================
+//==============================================================================
+io.on('connection', function (socket) {
+    console.log('Nou client connectat: ' + socket.id);
 
-// Ruta per obtenir tots els concerts
-app.get('/api/concerts', function (req, res) {
-    pool.query('SELECT * FROM concerts')
-        .then(function (resultat) {
-            res.json(resultat[0]);
-        })
-        .catch(function (error) {
-            res.status(500).json({ error: error.message });
-        });
+    socket.on('disconnect', function () {
+        console.log('Client desconnectat: ' + socket.id);
+    });
+
+    // Aquí anirà la lògica de reserva de seients en temps real.
+    socket.on('reserva_seient', function (dades) {
+        console.log('Reserva de seient rebuda:', dades);
+        // Emetem a tots els clients la actualització.
+        io.emit('actualitzacio_seient', dades);
+    });
 });
 
 //==============================================================================
 //================================ INICIS ======================================
 //==============================================================================
-// A. Esperar i llançar el servidor.
-app.listen(port, function () {
+server.listen(port, function () {
     console.log('--------------------------------------------------');
-    console.log('SERVIDOR BACKEND ACTIU AL PORT ' + port);
-    console.log('Projecte: TOTOSALA');
+    console.log('SERVIDOR DE TEMPS REAL ACTIU AL PORT ' + port);
+    console.log('Projecte: TOTOSALA (Node.js)');
     console.log('--------------------------------------------------');
 });
 
-// B. Gestió de tancament net.
 process.on('SIGINT', function () {
-    console.log('Tancant el servidor backend...');
+    console.log('Tancant el servidor de temps real...');
     process.exit();
 });
-

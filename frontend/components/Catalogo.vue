@@ -120,17 +120,17 @@ export default {
             : entrades.dadesConcerts.value;
 
         return base.filter(function (item) {
-            var matchNom = item.title.toLowerCase().includes(cerca.value.toLowerCase());
+            var matchNom = item.titol.toLowerCase().includes(cerca.value.toLowerCase());
             if (!matchNom) return false;
 
             if (entrades.categoriaActual.value === 'concerts') {
                 if (filtreMes.value !== '') {
-                    var mesItem = new Date(item.date).getMonth();
+                    var mesItem = new Date(item.data).getMonth();
                     if (mesItem != filtreMes.value) return false;
                 }
             } else {
                 if (filtreDia.value !== '') {
-                    var dataItem = new Date(item.date).toISOString().split('T')[0];
+                    var dataItem = new Date(item.data).toISOString().split('T')[0];
                     if (dataItem !== filtreDia.value) return false;
                 }
             }
