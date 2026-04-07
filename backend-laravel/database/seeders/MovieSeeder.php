@@ -18,8 +18,8 @@ class MovieSeeder extends Seeder
             'descripcio' => 'L\'epopeia de Paul Atreides continua.',
             'data' => '2026-04-10',
             'hora' => '18:30:00',
-            'preu' => 9.50,
-            'imatge_url' => 'https://image.tmdb.org/t/p/w500/8b8R8l3899v9D0XLaq9STWHExUM.jpg',
+            'preu' => 8.00,
+            'imatge_url' => 'dune.jpeg',
         ]);
 
         Movie::create([
@@ -28,7 +28,7 @@ class MovieSeeder extends Seeder
             'data' => '2026-04-12',
             'hora' => '20:00:00',
             'preu' => 8.00,
-            'imatge_url' => 'https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg',
+            'imatge_url' => 'interstellar.jpg',
         ]);
 
         Movie::create([
@@ -36,8 +36,8 @@ class MovieSeeder extends Seeder
             'descripcio' => 'La història de la bomba atòmica.',
             'data' => '2026-04-15',
             'hora' => '21:00:00',
-            'preu' => 10.00,
-            'imatge_url' => 'https://image.tmdb.org/t/p/w500/8Gxv2S9e6062G3dh290FlmIExvM.jpg',
+            'preu' => 8.00,
+            'imatge_url' => 'oppenheimer.png',
         ]);
 
         Movie::create([
@@ -45,8 +45,8 @@ class MovieSeeder extends Seeder
             'descripcio' => 'Batman s\'enfronta al Joker.',
             'data' => '2026-05-01',
             'hora' => '19:00:00',
-            'preu' => 8.50,
-            'imatge_url' => 'https://image.tmdb.org/t/p/w500/qJ2tW6WMUDr9p1v3toZp9PqU6rn.jpg',
+            'preu' => 8.00,
+            'imatge_url' => 'the dark knight.jpeg',
         ]);
     }
 }

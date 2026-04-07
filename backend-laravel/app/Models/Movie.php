@@ -18,6 +18,17 @@ class Movie extends Model
         'imatge_url',
     ];
 
+    public function getImatgeUrlAttribute($value)
+    {
+        if (!$value) {
+            return null;
+        }
+        if (strpos($value, 'http') === 0) {
+            return $value;
+        }
+        return url('images/' . str_replace(' ', '%20', $value));
+    }
+
     public function seats()
     {
         return $this->hasMany(MovieSeat::class);
