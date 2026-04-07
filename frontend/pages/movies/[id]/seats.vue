@@ -64,12 +64,13 @@
 
 <script>
 import { ref, onMounted, onUnmounted } from 'vue';
-import { useRoute } from '#app';
+import { useRoute, useRouter } from '#app';
 import { io } from 'socket.io-client';
 
 export default {
   setup: function() {
     var route = useRoute();
+    var router = useRouter();
     var movieId = route.params.id;
     var movie = ref({});
     var seients = ref([]);
@@ -102,6 +103,14 @@ export default {
                 var index = seients.value.findIndex(function(s) { return s.id == dades.seat_id; });
                 if (index !== -1) {
                     seients.value[index].status = dades.status;
+
+                    // Lògica de conflicte: si algú fixa el seient (1 o 2), el treiem de la nostra selecció
+                    if (dades.status !== 0) {
+                        var sIndex = seleccionats.value.findIndex(function(id) { return id == dades.seat_id; });
+                        if (sIndex !== -1) {
+                            seleccionats.value.splice(sIndex, 1);
+                        }
+                    }
                 }
             }
         });
@@ -118,41 +127,32 @@ export default {
     };
 
     var canviarSeleccio = function(seient) {
+      var index = seleccionats.value.indexOf(seient.id);
+      
+      // Si el seient ja està seleccionat per nosaltres, el treiem (deseleccionem)
+      if (index !== -1) {
+        seleccionats.value.splice(index, 1);
+        return;
+      }
+
+      // Si no està seleccionat, mirem si és lliure a la BD
       if (seient.status !== 0) return;
 
-      var index = seleccionats.value.indexOf(seient.id);
-      if (index === -1) {
-        if (seleccionats.value.length >= 5) {
-          alert('Màxim 5 seients seleccionats.');
-          return;
-        }
-        seleccionats.value.push(seient.id);
-        // Notificar al socket (status 1 = reservat/en procés)
-        socket.emit('reserva_seient', { movie_id: movieId, seat_id: seient.id, status: 1 });
-      } else {
-        seleccionats.value.splice(index, 1);
-        // Notificar al socket que torna a estar lliure
-        socket.emit('reserva_seient', { movie_id: movieId, seat_id: seient.id, status: 0 });
+      if (seleccionats.value.length >= 5) {
+        alert('Màxim 5 seients seleccionats.');
+        return;
       }
+      seleccionats.value.push(seient.id);
+      // No notifiquem al socket fins que anem a la pantalla de compra (segons els nous requisits)
     };
 
     var confirmarCompra = function() {
-        // En el futur aquí aniríem a la pantalla de pagament
-        // De moment simulem la compra que posa els seients en vermell
-        alert('Redirigint a la pantalla de pagament per a ' + seleccionats.value.length + ' seients...');
-        
-        // Simular compra per veure el resultat en temps real (RED)
-        seleccionats.value.forEach(function(sid) {
-            socket.emit('reserva_seient', { movie_id: movieId, seat_id: sid, status: 2 });
-        });
-        
-        // Enviar a Laravel per a persistència (en producció això ho faria la passarel·la de pagament)
-        fetch('http://localhost:8000/api/movies/purchase', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ seat_ids: seleccionats.value })
-        }).then(function() {
-            seleccionats.value = [];
+        if (seleccionats.value.length === 0) return;
+
+        // Naveguem a la pantalla de compra amb els seients seleccionats
+        router.push({
+            path: '/movies/' + movieId + '/purchase',
+            query: { seats: seleccionats.value.join(',') }
         });
     };
 
