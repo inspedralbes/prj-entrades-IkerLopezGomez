@@ -34,7 +34,8 @@
           </div>
         </div>
 
-        <button class="w-full bg-blue-600 text-white py-3 rounded-xl text-sm font-black hover:bg-blue-700 active:scale-95 transition-all shadow-md shadow-blue-100 uppercase tracking-widest">
+        <button @click="comprarEntrades(element)"
+                class="w-full bg-blue-600 text-white py-3 rounded-xl text-sm font-black hover:bg-blue-700 active:scale-95 transition-all shadow-md shadow-blue-100 uppercase tracking-widest">
           Comprar Entrades
         </button>
       </div>
@@ -56,6 +57,14 @@ export default {
       // Retorna data en format DD/MM/YYYY
       var d = new Date(dataStr);
       return d.toLocaleDateString('ca-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    },
+    comprarEntrades: function(element) {
+      // Només gestionem pel·lícules de moment
+      if (element.artista) {
+        alert('Selecció de seients per a concerts encara no disponible.');
+        return;
+      }
+      this.$router.push('/movies/' + element.id + '/seats');
     }
   }
 }

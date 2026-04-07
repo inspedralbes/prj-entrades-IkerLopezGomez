@@ -1,7 +1,7 @@
 <!-- Fitxer principal minimalista. La lògica és al component AppCatalogo. -->
 <template>
   <NuxtLayout>
-    <Catalogo />
+    <NuxtPage />
   </NuxtLayout>
 </template>
 
