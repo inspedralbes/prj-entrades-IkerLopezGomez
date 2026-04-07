@@ -13,9 +13,10 @@ return new class extends Migration {
         Schema::create('concert_seats', function (Blueprint $table) {
             $table->id();
             $table->foreignId('concert_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['available', 'reserved', 'sold'])->default('available');
+            $table->integer('status')->default(0); // 0: available, 1: reserved, 2: sold
             $table->string('row', 10);
             $table->integer('number');
+            $table->decimal('preu', 10, 2)->default(0);
             $table->timestamps();
         });
     }

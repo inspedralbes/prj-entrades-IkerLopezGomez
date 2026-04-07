@@ -14,6 +14,7 @@ class ConcertSeat extends Model
         'status',
         'row',
         'number',
+        'preu',
     ];
 
     public function concert()

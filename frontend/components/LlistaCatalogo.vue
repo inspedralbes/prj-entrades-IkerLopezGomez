@@ -59,12 +59,12 @@ export default {
       return d.toLocaleDateString('ca-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
     },
     comprarEntrades: function(element) {
-      // Només gestionem pel·lícules de moment
+      // Gestió de rutes segons el tipus d'esdeveniment
       if (element.artista) {
-        alert('Selecció de seients per a concerts encara no disponible.');
-        return;
+        this.$router.push('/concerts/' + element.id + '/seats');
+      } else {
+        this.$router.push('/movies/' + element.id + '/seats');
       }
-      this.$router.push('/movies/' + element.id + '/seats');
     }
   }
 }

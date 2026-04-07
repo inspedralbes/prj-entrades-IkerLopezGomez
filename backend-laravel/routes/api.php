@@ -11,6 +11,8 @@ Route::get('/movies/{id}/seats', [\App\Http\Controllers\MovieSeatController::cla
 Route::post('/movies/purchase', [\App\Http\Controllers\MovieSeatController::class , 'purchase']);
 Route::get('/concerts', [ConcertController::class , 'index']);
 Route::get('/concerts/{id}', [ConcertController::class , 'show']);
+Route::get('/concerts/{id}/seats', [\App\Http\Controllers\ConcertSeatController::class , 'index']);
+Route::post('/concerts/purchase', [\App\Http\Controllers\ConcertSeatController::class , 'purchase']);
 
 Route::get('/user', function (Request $request) {
     return $request->user();
