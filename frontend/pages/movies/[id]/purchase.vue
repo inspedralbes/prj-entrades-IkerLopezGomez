@@ -57,11 +57,13 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRoute, useRouter } from '#app';
 import { io } from 'socket.io-client';
+import { useAuthStore } from '~/store/auth';
 
 export default {
   setup: function() {
     var route = useRoute();
     var router = useRouter();
+    var authStore = useAuthStore();
     var movieId = route.params.id;
     var seatIds = route.query.seats ? route.query.seats.split(',') : [];
     
@@ -75,13 +77,11 @@ export default {
     var carregarDades = function() {
       carregant.value = true;
       
-      // Carregar detalls de la pel·lícula
       fetch('http://localhost:8000/api/movies/' + movieId)
         .then(function(res) { return res.json(); })
         .then(function(data) { movie.value = data; })
         .catch(function(err) { console.error('Error:', err); });
 
-      // Carregar informació específica dels seients
       fetch('http://localhost:8000/api/movies/' + movieId + '/seats')
         .then(function(res) { return res.json(); })
         .then(function(data) { 
@@ -98,14 +98,13 @@ export default {
         socket = io('http://localhost:3000');
 
         socket.on('connect', function() {
-            // Notify reservation (YELLOW) for all selected seats
             seatIds.forEach(function(sid) {
                 socket.emit('reserva_seient', { movie_id: movieId, seat_id: sid, status: 1 });
             });
         });
 
         socket.on('actualitzacio_seient', function(dades) {
-            if (finalitzat) return; // Ignore events triggered by our own purchase
+            if (finalitzat) return;
             if (dades.movie_id == movieId && dades.status === 2) {
                 if (seatIds.includes(dades.seat_id.toString())) {
                     alert('Atenció: Un dels seients ha estat comprat per un altre usuari. Torna al catàleg.');
@@ -119,21 +118,22 @@ export default {
         comprant.value = true;
         fetch('http://localhost:8000/api/movies/purchase', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + authStore.token
+            },
             body: JSON.stringify({ seat_ids: seatIds })
         })
         .then(function(res) { return res.json(); })
         .then(function(data) {
             if (data.success) {
                 finalitzat = true;
-                // Notificar compra final (RED)
                 seatIds.forEach(function(sid) {
                     socket.emit('reserva_seient', { movie_id: movieId, seat_id: sid, status: 2 });
                 });
                 alert('Compra realitzada amb èxit!');
-                router.push('/');
+                router.push('/my-tickets');
             } else {
-                // Un-reserve on failure
                 seatIds.forEach(function(sid) {
                     socket.emit('reserva_seient', { movie_id: movieId, seat_id: sid, status: 0 });
                 });
@@ -142,7 +142,6 @@ export default {
             }
         })
         .catch(function(err) {
-            // Un-reserve on error
             seatIds.forEach(function(sid) {
                 socket.emit('reserva_seient', { movie_id: movieId, seat_id: sid, status: 0 });
             });
@@ -161,6 +160,12 @@ export default {
             router.push('/');
             return;
         }
+        
+        if (!authStore.estaLoguejat || !authStore.token) {
+            router.push('/login?redirect=/movies/' + movieId + '/purchase?seats=' + seatIds.join(','));
+            return;
+        }
+        
         carregarDades();
         inicialitzarSocket();
     });
@@ -168,7 +173,6 @@ export default {
     onUnmounted(function() {
         if (socket) {
             if (!finalitzat) {
-                // Un-reserve seats if user leaves without completing purchase
                 seatIds.forEach(function(sid) {
                     socket.emit('reserva_seient', { movie_id: movieId, seat_id: sid, status: 0 });
                 });

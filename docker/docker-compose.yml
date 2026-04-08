@@ -58,6 +58,7 @@ services:
       DB_DATABASE: ticketing_db
       DB_USERNAME: user
       DB_PASSWORD: pass
+      SANCTUM_STATEFUL_DOMAINS: "localhost:3001"
     volumes:
       - ../backend-laravel:/var/www
     healthcheck:

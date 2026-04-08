@@ -42,10 +42,10 @@ class ConcertSeatController extends Controller
         ]);
 
         $seatIds = $request->input('seat_ids');
+        $userId = $request->user()->id;
 
         try {
-            $purchasedSeats = DB::transaction(function () use ($seatIds) {
-                // Lock the rows for update to prevent race conditions
+            $purchasedSeats = DB::transaction(function () use ($seatIds, $userId) {
                 $seats = ConcertSeat::whereIn('id', $seatIds)
                     ->lockForUpdate()
                     ->get();
@@ -54,8 +54,7 @@ class ConcertSeatController extends Controller
                     if ($seat->status == 2) {
                         throw new \Exception("El seient {$seat->row}{$seat->number} ja ha estat comprat.");
                     }
-                    // Status 2 is "Comprat"
-                    $seat->update(['status' => 2]);
+                    $seat->update(['status' => 2, 'user_id' => $userId]);
                 }
 
                 return $seats;

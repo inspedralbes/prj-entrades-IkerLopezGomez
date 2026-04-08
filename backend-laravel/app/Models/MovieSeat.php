@@ -14,6 +14,7 @@ class MovieSeat extends Model
         'status',
         'row',
         'number',
+        'user_id',
     ];
 
     public function movie()
