@@ -17,7 +17,7 @@ export var useAuthStore = defineStore('auth', {
             this.token = dadesUsuari.token;
             this.estaLoguejat = true;
             if (process.client) {
-                localStorage.setItem('token', this.token);
+                sessionStorage.setItem('token', this.token);
             }
         },
         // Funció per tancar sessió.
@@ -26,13 +26,13 @@ export var useAuthStore = defineStore('auth', {
             this.token = null;
             this.estaLoguejat = false;
             if (process.client) {
-                localStorage.removeItem('token');
+                sessionStorage.removeItem('token');
             }
         },
         // Carregar token des de localStorage
         carregarToken: function () {
             if (process.client) {
-                const token = localStorage.getItem('token');
+                const token = sessionStorage.getItem('token');
                 if (token) {
                     this.token = token;
                     this.estaLoguejat = true;
