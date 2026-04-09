@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Concert;
+use App\Models\ConcertSeat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ConcertController extends Controller
 {
@@ -31,6 +34,32 @@ class ConcertController extends Controller
         ]);
 
         $concert = Concert::create($validated);
+        
+        $zones = [
+            'P1' => ['rows' => 10, 'seats' => 10],
+            'P2' => ['rows' => 10, 'seats' => 12],
+            'G' => ['rows' => 15, 'seats' => 15],
+        ];
+        
+        $seats = [];
+        $now = Carbon::now();
+        foreach ($zones as $zone => $config) {
+            for ($r = 1; $r <= $config['rows']; $r++) {
+                for ($s = 1; $s <= $config['seats']; $s++) {
+                    $seats[] = [
+                        'concert_id' => $concert->id,
+                        'row' => $zone . $r,
+                        'number' => $s,
+                        'status' => 0,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+                }
+            }
+        }
+        
+        DB::table('concert_seats')->insert($seats);
+        
         return response()->json($concert, 201);
     }
 

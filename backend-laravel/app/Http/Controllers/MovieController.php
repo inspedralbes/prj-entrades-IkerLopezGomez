@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movie;
+use App\Models\MovieSeat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class MovieController extends Controller
 {
@@ -30,6 +33,27 @@ class MovieController extends Controller
         ]);
 
         $movie = Movie::create($validated);
+        
+        $files = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+        $seatsPerRow = 8;
+        
+        $seats = [];
+        $now = Carbon::now();
+        foreach ($files as $row) {
+            for ($num = 1; $num <= $seatsPerRow; $num++) {
+                $seats[] = [
+                    'movie_id' => $movie->id,
+                    'row' => $row,
+                    'number' => $num,
+                    'status' => 0,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+        }
+        
+        DB::table('movie_seats')->insert($seats);
+        
         return response()->json($movie, 201);
     }
 
