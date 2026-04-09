@@ -7,6 +7,9 @@ export default defineNuxtConfig({
         '@nuxtjs/tailwindcss',
         '@pinia/nuxt'
     ],
+    router: {
+        middleware: ['auth']
+    },
     // Configuració de Tailwind si fos necessari
     tailwindcss: {
         // configPath: 'tailwind.config',

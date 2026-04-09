@@ -67,10 +67,15 @@
         
         <!-- Info ràpida -->
         <div class="flex items-center justify-between mb-8">
-          <h2 class="text-2xl font-black text-gray-900 capitalize tracking-tight flex items-center gap-3">
-            {{ categoriaActual }}
-            <span class="text-xs font-bold bg-gray-200 py-1 px-3 rounded-full text-gray-500">{{ llistaFiltrada.length }}</span>
-          </h2>
+          <div>
+            <p v-if="authStore.usuari" class="text-sm font-bold text-blue-600 mb-1">
+              Benvingut, {{ authStore.usuari.name }}!
+            </p>
+            <h2 class="text-2xl font-black text-gray-900 capitalize tracking-tight flex items-center gap-3">
+              {{ categoriaActual }}
+              <span class="text-xs font-bold bg-gray-200 py-1 px-3 rounded-full text-gray-500">{{ llistaFiltrada.length }}</span>
+            </h2>
+          </div>
         </div>
 
         <div v-if="carregant" class="flex flex-col items-center justify-center py-40 animate-pulse text-gray-300">
@@ -97,10 +102,12 @@
 <script>
 import { ref, computed } from 'vue';
 import { useEntrades } from '../composables/useEntrades';
+import { useAuthStore } from '~/store/auth';
 
 export default {
   setup: function() {
     var entrades = useEntrades();
+    var authStore = useAuthStore();
     
     var cerca = ref('');
     var filtreMes = ref('');
@@ -147,7 +154,8 @@ export default {
       filtreMes: filtreMes,
       filtreDia: filtreDia,
       nomsMesos: nomsMesos,
-      resetFiltres: resetFiltres
+      resetFiltres: resetFiltres,
+      authStore: authStore
     };
   }
 }

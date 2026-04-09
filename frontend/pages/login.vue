@@ -89,7 +89,8 @@ const iniciarSessio = async () => {
         }
 
         authStore.iniciarSessio(data)
-        router.push('/')
+        sessionStorage.setItem('token', data.token)
+        return navigateTo('/')
     } catch (err) {
         error.value = err.message
     } finally {

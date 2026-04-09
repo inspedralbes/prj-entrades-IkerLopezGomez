@@ -1,7 +1,12 @@
 <template>
     <div class="min-h-screen bg-gray-100 p-4">
         <div class="max-w-4xl mx-auto">
-            <h2 class="text-2xl font-bold mb-6">Les meves entrades</h2>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Les meves entrades</h2>
+                <NuxtLink to="/" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Tornar al catàleg
+                </NuxtLink>
+            </div>
 
             <div v-if="carregant" class="text-center py-8">
                 <p class="text-gray-500">Carregant...</p>

@@ -2,8 +2,8 @@
   <Catalogo />
 </template>
 
-<script>
-export default {
-  // Nuxt 3 detecta automàticament els components a la carpeta /components
+<script setup>
+if (process.client && !sessionStorage.getItem('token')) {
+  navigateTo('/login')
 }
 </script>

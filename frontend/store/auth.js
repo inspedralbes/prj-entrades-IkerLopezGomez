@@ -30,12 +30,25 @@ export var useAuthStore = defineStore('auth', {
             }
         },
         // Carregar token des de localStorage
-        carregarToken: function () {
+        carregarToken: async function () {
             if (process.client) {
                 const token = sessionStorage.getItem('token');
                 if (token) {
                     this.token = token;
                     this.estaLoguejat = true;
+                    try {
+                        const response = await fetch('http://localhost:8000/api/auth/user', {
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+                        if (response.ok) {
+                            const data = await response.json();
+                            this.usuari = data.user;
+                        }
+                    } catch (e) {
+                        console.error('Error carregant usuari:', e);
+                    }
                 }
             }
         }
