@@ -35,4 +35,12 @@ Route::middleware('auth:sanctum')->group(function () {
         $total = \App\Models\User::count();
         return response()->json(['total' => $total]);
     })->middleware('admin');
+    
+    Route::post('/admin/movies', [\App\Http\Controllers\MovieController::class, 'store'])->middleware('admin');
+    Route::put('/admin/movies/{id}', [\App\Http\Controllers\MovieController::class, 'update'])->middleware('admin');
+    Route::delete('/admin/movies/{id}', [\App\Http\Controllers\MovieController::class, 'destroy'])->middleware('admin');
+    
+    Route::post('/admin/concerts', [\App\Http\Controllers\ConcertController::class, 'store'])->middleware('admin');
+    Route::put('/admin/concerts/{id}', [\App\Http\Controllers\ConcertController::class, 'update'])->middleware('admin');
+    Route::delete('/admin/concerts/{id}', [\App\Http\Controllers\ConcertController::class, 'destroy'])->middleware('admin');
 });

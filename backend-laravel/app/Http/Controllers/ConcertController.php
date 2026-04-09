@@ -20,7 +20,18 @@ class ConcertController extends Controller
      */
     public function store(Request $request)
     {
-    //
+        $validated = $request->validate([
+            'titol' => 'required|string|max:255',
+            'artista' => 'required|string|max:255',
+            'descripcio' => 'nullable|string',
+            'data' => 'required|date',
+            'hora' => 'required',
+            'preu' => 'required|numeric|min:0',
+            'imatge_url' => 'nullable|string',
+        ]);
+
+        $concert = Concert::create($validated);
+        return response()->json($concert, 201);
     }
 
     /**
@@ -36,7 +47,20 @@ class ConcertController extends Controller
      */
     public function update(Request $request, string $id)
     {
-    //
+        $concert = Concert::findOrFail($id);
+        
+        $validated = $request->validate([
+            'titol' => 'sometimes|string|max:255',
+            'artista' => 'sometimes|string|max:255',
+            'descripcio' => 'nullable|string',
+            'data' => 'sometimes|date',
+            'hora' => 'sometimes',
+            'preu' => 'sometimes|numeric|min:0',
+            'imatge_url' => 'nullable|string',
+        ]);
+
+        $concert->update($validated);
+        return response()->json($concert);
     }
 
     /**
@@ -44,6 +68,8 @@ class ConcertController extends Controller
      */
     public function destroy(string $id)
     {
-    //
+        $concert = Concert::findOrFail($id);
+        $concert->delete();
+        return response()->json(['message' => 'Concert eliminat']);
     }
 }
