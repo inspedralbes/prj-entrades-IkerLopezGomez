@@ -37,19 +37,34 @@ app.get('/api/estat', function (req, res) {
 //==============================================================================
 //================================ SOCKET.IO ===================================
 //==============================================================================
+var io = socketIo(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
+
+var connectedUsers = new Set();
+
 io.on('connection', function (socket) {
     console.log('Nou client connectat: ' + socket.id);
+    connectedUsers.add(socket.id);
+    io.emit('usuaris_connectats', connectedUsers.size);
 
     socket.on('disconnect', function () {
         console.log('Client desconnectat: ' + socket.id);
+        connectedUsers.delete(socket.id);
+        io.emit('usuaris_connectats', connectedUsers.size);
     });
 
-    // Aquí anirà la lògica de reserva de seients en temps real.
     socket.on('reserva_seient', function (dades) {
         console.log('Reserva de seient rebuda:', dades);
-        // Emetem a tots els clients la actualització.
         io.emit('actualitzacio_seient', dades);
     });
+});
+
+app.get('/api/usuaris-connectats', function (req, res) {
+    res.json({ total: connectedUsers.size });
 });
 
 //==============================================================================

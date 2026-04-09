@@ -25,3 +25,14 @@ Route::get('/user', function (Request $request) {
 Route::get('/auth/me', [AuthController::class, 'me'])->middleware('auth:sanctum');
 Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/my-tickets', [\App\Http\Controllers\TicketController::class, 'index'])->middleware('auth:sanctum');
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/admin/usuaris-connectats', function () {
+        return response()->json(['total' => 0]);
+    })->middleware('admin');
+    
+    Route::get('/admin/total-usuaris', function () {
+        $total = \App\Models\User::count();
+        return response()->json(['total' => $total]);
+    })->middleware('admin');
+});

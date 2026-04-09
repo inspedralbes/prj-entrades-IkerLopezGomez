@@ -1,6 +1,10 @@
 -- Script d'inserts per al sistema de venda d'entrades.
 USE ticketing_db;
 
+-- Inserts per a usuaris
+INSERT INTO users (name, email, password, role) VALUES
+('Admin', 'admin@totosala.com', '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin');
+
 -- Inserts per a pel·lícules
 INSERT INTO movies (titol, descripcio, data, hora, preu, imatge_url) VALUES
 ('Dune: Part Two', 'L''epopeia de Paul Atreides continua.', '2026-04-10', '18:30:00', 8.00, 'dune.jpeg'),

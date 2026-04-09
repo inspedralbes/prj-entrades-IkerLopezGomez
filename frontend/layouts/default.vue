@@ -12,6 +12,9 @@
         <NuxtLink v-if="!authStore.estaLoguejat" to="/register" class="text-blue-600 hover:underline">
           Registrar
         </NuxtLink>
+        <NuxtLink v-if="authStore.estaLoguejat && authStore.usuari?.role === 'admin'" to="/admin" class="text-blue-600 hover:underline">
+          Admin
+        </NuxtLink>
         <NuxtLink v-if="authStore.estaLoguejat" to="/my-tickets" class="text-blue-600 hover:underline">
           Les meves entrades
         </NuxtLink>
