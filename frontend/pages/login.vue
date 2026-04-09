@@ -90,6 +90,10 @@ const iniciarSessio = async () => {
 
         authStore.iniciarSessio(data)
         sessionStorage.setItem('token', data.token)
+        sessionStorage.setItem('user', JSON.stringify(data.user))
+        if (data.user.role === 'admin') {
+          return navigateTo('/admin')
+        }
         return navigateTo('/')
     } catch (err) {
         error.value = err.message

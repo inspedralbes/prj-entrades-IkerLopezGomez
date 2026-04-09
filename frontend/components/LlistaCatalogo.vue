@@ -8,7 +8,7 @@
       <!-- Imatge amb fallback -->
       <div class="h-48 bg-gray-100 flex items-center justify-center relative overflow-hidden">
         <img v-if="element.imatge_url" 
-             :src="element.imatge_url" 
+             :src="getImageUrl(element.imatge_url)" 
              :alt="element.titol"
              class="w-full h-full object-cover">
         <div v-else class="text-gray-400 text-xs font-bold uppercase tracking-widest">
@@ -52,6 +52,16 @@ export default {
     }
   },
   methods: {
+    getImageUrl: function(url) {
+      if (!url) return '';
+      if (url.startsWith('http://laravel-web')) {
+        return url.replace('http://laravel-web', 'http://localhost:8000');
+      }
+      if (url.startsWith('http://')) {
+        return url;
+      }
+      return '/images/' + url;
+    },
     formatarData: function(dataStr) {
       if (!dataStr) return '';
       // Retorna data en format DD/MM/YYYY

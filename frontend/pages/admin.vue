@@ -1,6 +1,11 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-8">
-    <h1 class="text-3xl font-bold mb-8">Pàgina d'Admin</h1>
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold">Pàgina d'Admin</h1>
+      <NuxtLink to="/public-catalog" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Veure catàleg
+      </NuxtLink>
+    </div>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
       <div class="bg-white rounded-lg shadow p-6">
@@ -54,7 +59,26 @@ const obtenirUsuarisConnectats = async () => {
 }
 
 onMounted(async () => {
-  if (!authStore.usuari || authStore.usuari.role !== 'admin') {
+  let user = authStore.usuari
+  
+  if (!user && process.client) {
+    const storedUser = sessionStorage.getItem('user')
+    if (storedUser) {
+      try {
+        user = JSON.parse(storedUser)
+        authStore.usuari = user
+        authStore.token = sessionStorage.getItem('token')
+        authStore.estaLoguejat = true
+      } catch (e) {}
+    }
+  }
+  
+  if (!authStore.token) {
+    navigateTo('/login')
+    return
+  }
+  
+  if (!user || user.role !== 'admin') {
     navigateTo('/')
     return
   }

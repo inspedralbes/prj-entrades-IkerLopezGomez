@@ -27,6 +27,7 @@ export var useAuthStore = defineStore('auth', {
             this.estaLoguejat = false;
             if (process.client) {
                 sessionStorage.removeItem('token');
+                sessionStorage.removeItem('user');
             }
         },
         // Carregar token des de localStorage
@@ -37,7 +38,7 @@ export var useAuthStore = defineStore('auth', {
                     this.token = token;
                     this.estaLoguejat = true;
                     try {
-                        const response = await fetch('http://localhost:8000/api/auth/user', {
+                        const response = await fetch('/api/auth/me', {
                             headers: {
                                 'Authorization': `Bearer ${token}`
                             }

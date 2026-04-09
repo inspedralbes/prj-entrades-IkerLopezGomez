@@ -13,13 +13,13 @@ export var useEntrades = function () {
         carregant.value = true;
 
         // Carreguem pel·lícules des de Laravel
-        fetch('http://localhost:8000/api/movies')
+        fetch('/api/movies')
             .then(function (res) { return res.json(); })
             .then(function (data) { dadesPelicules.value = data; })
             .catch(function (err) { console.error('Error carregant pel·lícules:', err); });
 
         // Carreguem concerts des de Laravel
-        fetch('http://localhost:8000/api/concerts')
+        fetch('/api/concerts')
             .then(function (res) { return res.json(); })
             .then(function (data) { dadesConcerts.value = data; })
             .catch(function (err) { console.error('Error carregant concerts:', err); })

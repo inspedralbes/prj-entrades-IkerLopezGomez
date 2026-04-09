@@ -1,6 +1,4 @@
 // Fitxer de configuració de Nuxt 3.
-// Configura els mòduls com TailwindCSS i Pinia per al frontend del sistema d'entrades.
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     devtools: { enabled: true },
     modules: [
@@ -10,23 +8,22 @@ export default defineNuxtConfig({
     router: {
         middleware: ['auth']
     },
-    // Configuració de Tailwind si fos necessari
-    tailwindcss: {
-        // configPath: 'tailwind.config',
-        // exposeConfig: false,
-        // config: {},
-        // viewer: true,
-    },
     vite: {
         server: {
             hmr: {
                 protocol: 'ws',
                 host: 'localhost',
-                port: 3001 // El port extern de Docker
+                port: 3001
             },
             watch: {
-                usePolling: true, // Necessari sovint en Docker
+                usePolling: true,
                 interval: 1000
+            },
+            proxy: {
+                '/api': {
+                    target: 'http://laravel-web',
+                    changeOrigin: true
+                }
             }
         }
     }
