@@ -2,7 +2,7 @@
 USE ticketing_db;
 
 -- Inserts per a usuaris
-INSERT INTO users (name, email, password, role) VALUES
+INSERT INTO users (full_name, email, password_hash, role) VALUES
 ('Admin', 'admin@totosala.com', '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin');
 
 -- Inserts per a pel·lícules
