@@ -10,9 +10,11 @@ export default defineNuxtConfig({
     },
     vite: {
         server: {
+            host: '0.0.0.0',
+            port: 3001,
             hmr: {
                 protocol: 'ws',
-                host: 'localhost',
+                host: '0.0.0.0',
                 port: 3001
             },
             watch: {
