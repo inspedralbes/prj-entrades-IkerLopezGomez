@@ -1,4 +1,4 @@
-FROM php:8.3-fpm AS builder
+FROM php:8.4-fpm AS builder
 
 RUN apt-get update && apt-get install -y \
     libzip-dev \
@@ -19,9 +19,11 @@ WORKDIR /var/www
 COPY composer.json ./
 COPY composer.lock ./
 
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --no-scripts
 
 COPY . .
+
+RUN composer dump-autoload --no-dev --no-scripts
 
 RUN php artisan config:cache \
     && php artisan route:cache \

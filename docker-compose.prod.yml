@@ -1,29 +1,21 @@
 version: '3.8'
 
 services:
-  nginx:
-    build:
-      context: ./docker
-      dockerfile: Dockerfile.nginx
-    ports:
-      - "80:80"
-    depends_on:
-      - frontend
-      - laravel
-      - nodejs
-    networks:
-      - app-network
-
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile.prod
+      context: .
+      dockerfile: frontend/Dockerfile.prod
+    ports:
+      - "8080:80"
     environment:
-      - NODE_ENV=production
-      - HOST=0.0.0.0
+      - LARAVEL_URL=http://laravel:8000
+      - NODEJS_URL=http://nodejs:3001
+    depends_on:
+      - laravel
+      - nodejs
+      - db
     networks:
       - app-network
-    restart: unless-stopped
 
   laravel:
     build:
@@ -40,7 +32,6 @@ services:
       - db
     networks:
       - app-network
-    restart: unless-stopped
 
   nodejs:
     build:
@@ -51,7 +42,6 @@ services:
       - PORT=3001
     networks:
       - app-network
-    restart: unless-stopped
 
   db:
     image: mysql:8.0
@@ -63,7 +53,6 @@ services:
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app-network
-    restart: unless-stopped
 
 networks:
   app-network:
