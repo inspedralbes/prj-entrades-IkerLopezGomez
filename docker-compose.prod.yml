@@ -7,9 +7,8 @@ services:
       dockerfile: Dockerfile.prod
     ports:
       - "3000:80"
-    environment:
-      - LARAVEL_URL=http://laravel:8000
-      - NODEJS_URL=http://nodejs:3001
+    env_file:
+      - .env
     depends_on:
       - laravel
       - nodejs
@@ -23,13 +22,8 @@ services:
       dockerfile: Dockerfile.prod
     ports:
       - "8000:8000"
-    environment:
-      - APP_ENV=production
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_DATABASE=entrades
-      - DB_USERNAME=root
-      - DB_PASSWORD=${DB_PASSWORD}
+    env_file:
+      - .env
     depends_on:
       - db
     networks:
@@ -41,17 +35,15 @@ services:
       dockerfile: Dockerfile.prod
     ports:
       - "3001:3001"
-    environment:
-      - NODE_ENV=production
-      - PORT=3001
+    env_file:
+      - .env
     networks:
       - app-network
 
   db:
     image: mysql:8.0
-    environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-      - MYSQL_DATABASE=entrades
+    env_file:
+      - .env
     volumes:
       - db-data:/var/lib/mysql
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
