@@ -168,12 +168,12 @@ export default {
 
     var carregarDades = function() {
       carregant.value = true;
-      fetch('http://localhost:8000/api/concerts/' + concertId)
+      fetch('/api/concerts/' + concertId)
         .then(function(res) { return res.json(); })
         .then(function(data) { concert.value = data; })
         .catch(function(err) { console.error('Error concert:', err); });
 
-      fetch('http://localhost:8000/api/concerts/' + concertId + '/seats')
+      fetch('/api/concerts/' + concertId + '/seats')
         .then(function(res) { return res.json(); })
         .then(function(data) { seients.value = data; })
         .catch(function(err) { console.error('Error seients:', err); })

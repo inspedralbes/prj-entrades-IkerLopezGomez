@@ -51,7 +51,7 @@ onMounted(async () => {
     }
 
     try {
-        const response = await fetch('http://localhost:8000/api/my-tickets', {
+        const response = await fetch('/api/my-tickets', {
             headers: {
                 'Authorization': `Bearer ${authStore.token}`
             }

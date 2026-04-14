@@ -77,12 +77,12 @@ export default {
     var carregarDades = function() {
       carregant.value = true;
       
-      fetch('http://localhost:8000/api/movies/' + movieId)
+      fetch('/api/movies/' + movieId)
         .then(function(res) { return res.json(); })
         .then(function(data) { movie.value = data; })
         .catch(function(err) { console.error('Error:', err); });
 
-      fetch('http://localhost:8000/api/movies/' + movieId + '/seats')
+      fetch('/api/movies/' + movieId + '/seats')
         .then(function(res) { return res.json(); })
         .then(function(data) { 
            infoSeients.value = data.filter(function(s) { return seatIds.includes(s.id.toString()); });
@@ -116,7 +116,7 @@ export default {
 
     var comprar = function() {
         comprant.value = true;
-        fetch('http://localhost:8000/api/movies/purchase', {
+        fetch('/api/movies/purchase', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',

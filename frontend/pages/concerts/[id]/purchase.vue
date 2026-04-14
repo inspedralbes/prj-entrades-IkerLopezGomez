@@ -89,12 +89,12 @@ export default {
 
     var carregarDades = function() {
       carregant.value = true;
-      fetch('http://localhost:8000/api/concerts/' + concertId)
+      fetch('/api/concerts/' + concertId)
         .then(function(res) { return res.json(); })
         .then(function(data) { concert.value = data; })
         .catch(function(err) { console.error('Error:', err); });
 
-      fetch('http://localhost:8000/api/concerts/' + concertId + '/seats')
+      fetch('/api/concerts/' + concertId + '/seats')
         .then(function(res) { return res.json(); })
         .then(function(data) { 
            infoSeients.value = data.filter(function(s) { return seatIds.includes(s.id.toString()); });
@@ -144,7 +144,7 @@ export default {
 
     var comprar = function() {
         comprant.value = true;
-        fetch('http://localhost:8000/api/concerts/purchase', {
+        fetch('/api/concerts/purchase', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',

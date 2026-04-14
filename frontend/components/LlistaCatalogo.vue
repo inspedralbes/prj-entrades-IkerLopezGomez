@@ -54,8 +54,9 @@ export default {
   methods: {
     getImageUrl: function(url) {
       if (!url) return '';
-      if (url.startsWith('http://laravel-web')) {
-        return url.replace('http://laravel-web', 'http://localhost:8000');
+      // Si la URL viene de la API con el nombre del contenedor, la convertimos en relativa
+      if (url.startsWith('http://laravel-web') || url.startsWith('http://laravel')) {
+        return url.replace(/^http:\/\/[^\/]+/, '');
       }
       if (url.startsWith('http://')) {
         return url;

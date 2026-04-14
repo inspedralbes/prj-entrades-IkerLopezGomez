@@ -82,13 +82,13 @@ export default {
       carregant.value = true;
       
       // Carregar detalls de la pel·lícula
-      fetch('http://localhost:8000/api/movies/' + movieId)
+      fetch('/api/movies/' + movieId)
         .then(function(res) { return res.json(); })
         .then(function(data) { movie.value = data; })
         .catch(function(err) { console.error('Error pel·lícula:', err); });
 
       // Carregar seients
-      fetch('http://localhost:8000/api/movies/' + movieId + '/seats')
+      fetch('/api/movies/' + movieId + '/seats')
         .then(function(res) { return res.json(); })
         .then(function(data) { seients.value = data; })
         .catch(function(err) { console.error('Error seients:', err); })

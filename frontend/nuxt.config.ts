@@ -23,7 +23,7 @@ export default defineNuxtConfig({
             },
             proxy: {
                 '/api': {
-                    target: 'http://laravel-web',
+                    target: 'http://laravel:8000',
                     changeOrigin: true
                 }
             }
