@@ -46,7 +46,7 @@
             </form>
 
             <p class="mt-4 text-center text-sm text-gray-600">
-                No tens compte? 
+                No tenss compte? 
                 <NuxtLink to="/register" class="text-blue-600 hover:underline">Registra't</NuxtLink>
             </p>
         </div>
