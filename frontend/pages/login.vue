@@ -6,7 +6,7 @@
             <form @submit.prevent="iniciarSessio">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
-                        Correu elaaaaaaaaaaaaaaaectrònic
+                        Correu electrònic
                     </label>
                     <input 
                         v-model="form.email"
