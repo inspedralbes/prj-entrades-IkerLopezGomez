@@ -1,0 +1,36 @@
+FROM php:8.4-fpm AS builder
+
+RUN for i in 1 2 3 4 5; do apt-get update && apt-get install -y --fix-missing \
+    zlib1g-dev \
+    libexpat1 \
+    libzip-dev \
+    libpng-dev \
+    libfreetype-dev \
+    libjpeg-dev \
+    libpng16-16t64 \
+    libfreetype6 \
+    libjpeg62-turbo \
+    libbz2-dev \
+    git \
+    curl \
+    && apt --fix-broken install -y \
+    && break || (sleep 5 && continue); done \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo pdo_mysql zip gd
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+WORKDIR /var/www
+
+COPY composer.json ./
+COPY composer.lock ./
+
+RUN composer install --no-dev --no-scripts
+
+COPY . .
+
+RUN composer dump-autoload --no-dev --no-scripts
+
+EXPOSE 8000
+
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
